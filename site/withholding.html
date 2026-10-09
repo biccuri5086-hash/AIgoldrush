@@ -1,0 +1,11 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>源泉徴収税額計算(報酬・原稿料・デザイン料)|かんたん計算ツール</title><meta name="description" content="報酬の源泉徴収税額(10.21%/20.42%)と差引支払額を自動計算。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="tax.html">消費税</a><a href="withholding.html">源泉徴収</a><a href="percent.html">割合</a></nav></header>
+<main><h1>報酬の源泉徴収税額計算</h1>
+<div class="card"><label>報酬額(円)</label><input id="a" type="number" inputmode="numeric" value="200000">
+<label>金額の区分</label><select id="t"><option value="exc">消費税を含まない(請求書に税額を区分)</option><option value="inc">消費税込みの金額</option></select>
+<button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+<h2>計算方法</h2><p>原稿料・デザイン料・講演料などの報酬は、1回の支払額が100万円以下なら10.21%、100万円を超える部分は20.42%です。請求書で消費税額が区分されている場合は、税抜金額が源泉徴収の対象です。弁護士・税理士等の報酬や、他の所得区分には別の規定があります。</p>
+</main><footer>計算結果は目安です。税務上の判断は税理士・税務署にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const f=n=>Math.floor(n).toLocaleString("ja-JP");function go(){const a=Math.floor(+document.getElementById("a").value),b=a>1e6?1e6:a;const w=Math.floor(b*0.1021+(a>1e6?(a-1e6)*0.2042:0));document.getElementById("o").innerHTML=`源泉徴収税額 <b>${f(w)}円</b><br>差引支払額 <b>${f(a-w)}円</b>(対象額 ${f(a)}円)`}go()</script></body></html>

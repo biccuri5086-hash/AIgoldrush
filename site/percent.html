@@ -1,0 +1,10 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>割合・割引・増減率の計算|かんたん計算ツール</title><meta name="description" content="○%引きの価格、増減率、割合を簡単に計算できる無料ツール。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="tax.html">消費税</a><a href="withholding.html">源泉徴収</a><a href="percent.html">割合</a></nav></header>
+<main><h1>割合・割引・増減率の計算</h1>
+<div class="card"><label>元の金額・数値</label><input id="a" type="number" value="8000"><label>割合(%)</label><input id="p" type="number" value="20">
+<label>比較する数値(増減率用)</label><input id="b" type="number" value="9600"><button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+<h2>計算式</h2><p>割引後 = 元の金額 × (1 − 割合/100)、増減率 = (比較値 − 元の値) ÷ 元の値 × 100 です。</p>
+</main><footer>計算結果は目安です。税務上の判断は税理士・税務署にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const f=n=>Math.floor(n).toLocaleString("ja-JP");function go(){const a=+document.getElementById("a").value,p=+document.getElementById("p").value,b=+document.getElementById("b").value;document.getElementById("o").innerHTML=`${p}%引き → <b>${f(a*(1-p/100))}円</b><br>${p}%増し → <b>${f(a*(1+p/100))}円</b><br>${f(a)} → ${f(b)} の増減率 <b>${a?((b-a)/a*100).toFixed(1):"-"}%</b>`}go()</script></body></html>

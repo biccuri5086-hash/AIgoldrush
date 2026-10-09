@@ -1,0 +1,12 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>消費税計算(税込⇔税抜・10%/8%)|かんたん計算ツール</title><meta name="description" content="税込・税抜金額を10%/8%で即計算。インボイス請求書の端数処理にも。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="tax.html">消費税</a><a href="withholding.html">源泉徴収</a><a href="percent.html">割合</a></nav></header>
+<main><h1>消費税計算(税込⇔税抜)</h1>
+<div class="card"><label>金額(円)</label><input id="a" type="number" inputmode="numeric" value="10000">
+<label>税率</label><select id="r"><option value="0.1">10%(標準)</option><option value="0.08">8%(軽減)</option></select>
+<label>端数処理</label><select id="m"><option value="floor">切り捨て</option><option value="round">四捨五入</option><option value="ceil">切り上げ</option></select>
+<button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+<h2>使い方</h2><p>入力した金額を税抜として税込を、税込として税抜を同時に表示します。インボイス制度では、請求書1枚につき税率ごとに1回だけ端数処理します。</p>
+</main><footer>計算結果は目安です。税務上の判断は税理士・税務署にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const f=n=>Math.floor(n).toLocaleString("ja-JP");function go(){const a=+document.getElementById("a").value,r=+document.getElementById("r").value,m=Math[document.getElementById("m").value];const inc=m(a*(1+r)),exc=m(a/(1+r));document.getElementById("o").innerHTML=`税抜${f(a)}円 → 税込 <b>${f(inc)}円</b>(消費税 ${f(inc-a)}円)<br>税込${f(a)}円 → 税抜 <b>${f(exc)}円</b>(消費税 ${f(a-exc)}円)`}go()</script></body></html>
