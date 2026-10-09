@@ -9,3 +9,7 @@ label{display:block;margin:10px 0 4px;font-weight:600}input,select{width:100%;pa
 button{margin-top:14px;padding:10px 18px;font-size:1rem;border:0;border-radius:8px;background:var(--ac);color:#fff;cursor:pointer}
 .res{font-size:1.1rem}.res b{color:var(--ac)}.ad{min-height:90px;margin:16px 0;color:var(--mut);font-size:.8rem;text-align:center}
 footer{color:var(--mut);font-size:.85rem}ul.tools{padding-left:1.2em}
+nav{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px}nav a{margin-right:0;font-size:.9rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:10px 0}th,td{border:1px solid var(--bd);padding:4px 8px;text-align:right}th:first-child,td:first-child{text-align:left}
+h2{font-size:1.15rem}.card h2{margin-top:0}hr{border:0;border-top:1px solid var(--bd);margin:10px 0}
+footer details{margin-bottom:12px}footer summary{cursor:pointer;color:var(--ac)}footer a{color:var(--ac)}

@@ -1,0 +1,20 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>残業代・割増賃金計算(時間外・深夜・休日)|かんたん計算ツール</title><meta name="description" content="月給と所定労働時間から1時間あたりの賃金を出し、時間外(25%)・月60時間超(50%)・深夜(25%加算)・法定休日(35%)の割増賃金を計算します。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#work">給与・働き方</a><a href="index.html#biz">事業・経理</a><a href="index.html#life">お金・日付</a></nav></header>
+<main><h1>残業代(割増賃金)の計算</h1><p>労働基準法の割増率で残業代を計算します。</p>
+<div class="card" oninput="go()" onchange="go()"><label>割増の基礎となる月給(円。基本給+役職手当など。通勤・家族・住宅手当等は除く)</label><input id="s" type="number" inputmode="numeric" value="300000">
+<label>月平均所定労働時間(時間)</label><input id="t" type="number" step="0.01" value="160">
+<label>法定時間外労働(月60時間までの部分・時間)</label><input id="o1" type="number" step="0.25" value="20">
+<label>月60時間を超える時間外労働(時間)</label><input id="o2" type="number" step="0.25" value="0">
+<label>法定休日労働(時間)</label><input id="h" type="number" step="0.25" value="0">
+<label>深夜労働(22時〜5時、上記と重なる時間も含めた合計・時間)</label><input id="n" type="number" step="0.25" value="5">
+<button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<h2>割増率(労働基準法)</h2><p>法定時間外(1日8時間・週40時間超):25%以上/月60時間超の時間外:50%以上(2023年4月から中小企業も適用)/法定休日:35%以上/深夜(22〜5時):25%以上。深夜と時間外・休日が重なる場合は加算され、時間外+深夜=50%、休日+深夜=60%、60時間超+深夜=75%です。</p>
+<h2>前提</h2><p>1時間あたり賃金=月給÷月平均所定労働時間(円未満四捨五入)。時間外の欄には「法定労働時間を超えた時間」を入力します(所定労働時間内の残業は含めません)。深夜時間は時間外・休日と重なる分も含め、深夜の割増(0.25)を別に加算する方式で計算しています。管理監督者・固定残業代・変形労働時間制などは対象外です。</p>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+</main><footer><details><summary>すべてのツール</summary><p><b>税金・請求書</b><br><a href="tax.html">消費税計算(税込⇔税抜)</a> / <a href="withholding.html">報酬の源泉徴収税額計算</a> / <a href="bill.html">10%・8%混在の請求書 消費税計算</a> / <a href="invoice.html">インボイス登録・消費税納税額の比較</a> / <a href="sidetax.html">副業の税金(所得税・住民税)の目安</a> / <a href="grossup.html">手取りから請求額を逆算(源泉徴収あり)</a></p><p><b>給与・働き方</b><br><a href="hourly.html">時給⇔月給・年収の換算</a> / <a href="overtime.html">残業代(割増賃金)の計算</a> / <a href="worktime.html">勤務時間・労働時間の計算</a> / <a href="yukyu.html">有給休暇の付与日数計算</a> / <a href="target.html">フリーランスの必要時給・単価の計算</a></p><p><b>事業・経理</b><br><a href="percent.html">割合・割引・増減率の計算</a> / <a href="margin.html">利益率・粗利率の計算</a> / <a href="breakeven.html">損益分岐点の計算</a> / <a href="rent.html">家賃・光熱費の按分計算</a> / <a href="depreciation.html">減価償却費の計算(定額法)</a></p><p><b>お金・日付</b><br><a href="nissuu.html">日割り計算・日数計算</a> / <a href="wareki.html">西暦⇔和暦変換・年齢計算</a> / <a href="compound.html">複利計算・積立シミュレーション</a> / <a href="loan.html">ローン返済シミュレーション</a></p></details>計算結果は目安です。税務・労務・法律上の判断は、税理士・社会保険労務士・税務署などの専門家や公的機関にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const $=i=>document.getElementById(i),n=i=>+$(i).value||0,f=x=>Math.round(x).toLocaleString("ja-JP"),yen=x=>f(x)+"円",out=h=>{$("o").innerHTML=h};
+function go(){const s=n("s"),t=n("t");if(t<=0){out("所定労働時間を入力してください");return}const a=n("o1"),b=n("o2"),h=n("h"),ni=n("n"),base=s/t;
+const w=[["時間外(1.25倍)",1.25*a],["60時間超(1.5倍)",1.5*b],["法定休日(1.35倍)",1.35*h],["深夜の加算分(0.25倍)",0.25*ni]];const tot=Math.round(base*w.reduce((x,y)=>x+y[1],0));
+out(`1時間あたり賃金 <b>${yen(Math.round(base))}</b><br>`+w.map(x=>`${x[0]}:${yen(base*x[1])}`).join("<br>")+`<hr>割増を含む残業代の合計 <b>${yen(tot)}</b>`)}
+go()</script></body></html>

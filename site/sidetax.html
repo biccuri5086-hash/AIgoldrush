@@ -1,0 +1,19 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>副業の所得税・住民税の増加額 目安計算|かんたん計算ツール</title><meta name="description" content="本業の課税所得に副業の所得を足したときに増える所得税(復興特別所得税込み)と住民税を概算。青色申告特別控除の有無も反映できます。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#work">給与・働き方</a><a href="index.html#biz">事業・経理</a><a href="index.html#life">お金・日付</a></nav></header>
+<main><h1>副業の税金(所得税・住民税)の目安</h1><p>副業で稼いだ分に対していくら税金が増えるかを概算します。</p>
+<div class="card" oninput="go()" onchange="go()"><label>本業の課税所得(円。源泉徴収票の「給与所得控除後の金額」−所得控除の合計)</label><input id="b" type="number" inputmode="numeric" value="3000000">
+<label>副業の収入(年間・円)</label><input id="r" type="number" inputmode="numeric" value="700000">
+<label>副業の必要経費(年間・円)</label><input id="e" type="number" inputmode="numeric" value="200000">
+<label>青色申告特別控除(事業所得として開業届と青色申告承認が必要)</label><select id="q"><option value="0">なし(雑所得・白色申告など)</option><option value="100000">10万円</option><option value="550000">55万円</option><option value="650000">65万円</option></select>
+<button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<h2>計算方法</h2><p>副業の所得 = 収入 − 経費 −(青色申告特別控除)。所得税 =「本業+副業の課税所得」に対する税額 − 「本業のみ」の税額(超過累進税率5〜45%)× 復興特別所得税2.1%を加算。住民税は副業所得の一律10%(所得割)で概算します。</p>
+<h2>前提・注意</h2><p>2026年時点の所得税率区分(195万円以下5%、330万円以下10%、695万円以下20%、900万円以下23%、1,800万円以下33%、4,000万円以下40%、4,000万円超45%)を使用。課税所得は千円未満切捨てです。社会保険料・国民健康保険料の増加、住民税の均等割、各種控除の変動は含みません。副業が給与所得の場合は損益通算や所得区分が異なります。給与所得者は副業の所得が年20万円以下なら所得税の確定申告は不要ですが、住民税の申告は必要です。</p>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+</main><footer><details><summary>すべてのツール</summary><p><b>税金・請求書</b><br><a href="tax.html">消費税計算(税込⇔税抜)</a> / <a href="withholding.html">報酬の源泉徴収税額計算</a> / <a href="bill.html">10%・8%混在の請求書 消費税計算</a> / <a href="invoice.html">インボイス登録・消費税納税額の比較</a> / <a href="sidetax.html">副業の税金(所得税・住民税)の目安</a> / <a href="grossup.html">手取りから請求額を逆算(源泉徴収あり)</a></p><p><b>給与・働き方</b><br><a href="hourly.html">時給⇔月給・年収の換算</a> / <a href="overtime.html">残業代(割増賃金)の計算</a> / <a href="worktime.html">勤務時間・労働時間の計算</a> / <a href="yukyu.html">有給休暇の付与日数計算</a> / <a href="target.html">フリーランスの必要時給・単価の計算</a></p><p><b>事業・経理</b><br><a href="percent.html">割合・割引・増減率の計算</a> / <a href="margin.html">利益率・粗利率の計算</a> / <a href="breakeven.html">損益分岐点の計算</a> / <a href="rent.html">家賃・光熱費の按分計算</a> / <a href="depreciation.html">減価償却費の計算(定額法)</a></p><p><b>お金・日付</b><br><a href="nissuu.html">日割り計算・日数計算</a> / <a href="wareki.html">西暦⇔和暦変換・年齢計算</a> / <a href="compound.html">複利計算・積立シミュレーション</a> / <a href="loan.html">ローン返済シミュレーション</a></p></details>計算結果は目安です。税務・労務・法律上の判断は、税理士・社会保険労務士・税務署などの専門家や公的機関にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const $=i=>document.getElementById(i),n=i=>+$(i).value||0,f=x=>Math.round(x).toLocaleString("ja-JP"),yen=x=>f(x)+"円",out=h=>{$("o").innerHTML=h};
+function itax(t){t=Math.floor(Math.max(0,t)/1000)*1000;const B=[[1950000,5,0],[3300000,10,97500],[6950000,20,427500],[9000000,23,636000],[18000000,33,1536000],[40000000,40,2796000],[Infinity,45,4796000]];for(const x of B)if(t<=x[0])return Math.floor(t*x[1]/100-x[2])}
+function side(base,rev,exp,blue){const inc=Math.max(0,rev-exp-blue);const d=itax(base+inc)-itax(base);const it=Math.floor(d*1.021);const rs=Math.floor(inc/1000)*100;return{inc,it,rs,tot:it+rs}}
+function go(){const s=side(n("b"),n("r"),n("e"),+$("q").value);
+out(`副業の所得 <b>${yen(s.inc)}</b><br>増える所得税(復興特別所得税込) <b>${yen(s.it)}</b><br>増える住民税(10%) <b>${yen(s.rs)}</b><hr>税金の増加額 合計 <b>${yen(s.tot)}</b>(副業所得に対し実効 ${s.inc>0?(s.tot/s.inc*100).toFixed(1):0}%)<br>副業の手取り(税引後・社会保険料除く) ${yen(n("r")-n("e")-s.tot)}`)}
+go()</script></body></html>

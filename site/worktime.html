@@ -1,0 +1,20 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>勤務時間計算(休憩・残業・深夜時間)|かんたん計算ツール</title><meta name="description" content="始業・終業時刻と休憩時間から実労働時間を計算。8時間超の残業時間、深夜(22時〜5時)の時間、時給を入れれば割増込みの賃金も概算できます。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#work">給与・働き方</a><a href="index.html#biz">事業・経理</a><a href="index.html#life">お金・日付</a></nav></header>
+<main><h1>勤務時間・労働時間の計算</h1><p>出退勤時刻から実働時間・残業・深夜時間を計算します。</p>
+<div class="card" oninput="go()" onchange="go()"><label>始業時刻</label><input id="s" type="time" value="10:00">
+<label>終業時刻(翌日にまたがる場合も可)</label><input id="e" type="time" value="23:30">
+<label>休憩時間(分)</label><input id="b" type="number" value="60">
+<label>時給(円。空欄なら賃金は計算しません)</label><input id="h" type="number" inputmode="numeric" value="1500">
+<button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<h2>計算方法</h2><p>実労働時間 = 終業 − 始業 − 休憩。1日8時間を超えた部分を時間外(残業)、22時〜翌5時にかかる部分を深夜として表示します。賃金の概算は「時給 × 実労働時間 + 時間外の25%加算 + 深夜の25%加算」です。</p>
+<h2>前提</h2><p>休憩は深夜時間帯には取っていないものとして、深夜時間から差し引いていません。法定休日・週40時間超・変形労働時間制・月60時間超の割増(50%)は考慮していません。終業が始業以前の場合は翌日終業とみなします。</p>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+</main><footer><details><summary>すべてのツール</summary><p><b>税金・請求書</b><br><a href="tax.html">消費税計算(税込⇔税抜)</a> / <a href="withholding.html">報酬の源泉徴収税額計算</a> / <a href="bill.html">10%・8%混在の請求書 消費税計算</a> / <a href="invoice.html">インボイス登録・消費税納税額の比較</a> / <a href="sidetax.html">副業の税金(所得税・住民税)の目安</a> / <a href="grossup.html">手取りから請求額を逆算(源泉徴収あり)</a></p><p><b>給与・働き方</b><br><a href="hourly.html">時給⇔月給・年収の換算</a> / <a href="overtime.html">残業代(割増賃金)の計算</a> / <a href="worktime.html">勤務時間・労働時間の計算</a> / <a href="yukyu.html">有給休暇の付与日数計算</a> / <a href="target.html">フリーランスの必要時給・単価の計算</a></p><p><b>事業・経理</b><br><a href="percent.html">割合・割引・増減率の計算</a> / <a href="margin.html">利益率・粗利率の計算</a> / <a href="breakeven.html">損益分岐点の計算</a> / <a href="rent.html">家賃・光熱費の按分計算</a> / <a href="depreciation.html">減価償却費の計算(定額法)</a></p><p><b>お金・日付</b><br><a href="nissuu.html">日割り計算・日数計算</a> / <a href="wareki.html">西暦⇔和暦変換・年齢計算</a> / <a href="compound.html">複利計算・積立シミュレーション</a> / <a href="loan.html">ローン返済シミュレーション</a></p></details>計算結果は目安です。税務・労務・法律上の判断は、税理士・社会保険労務士・税務署などの専門家や公的機関にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const $=i=>document.getElementById(i),n=i=>+$(i).value||0,f=x=>Math.round(x).toLocaleString("ja-JP"),yen=x=>f(x)+"円",out=h=>{$("o").innerHTML=h};
+function hm(s){const m=/^(\d{1,2}):(\d{2})$/.exec(s||"");return m?+m[1]*60+ +m[2]:null}
+function wt(S,E,B,H){if(E<=S)E+=1440;const tot=E-S,work=Math.max(0,tot-B),over=Math.max(0,work-480);let night=0;for(const iv of [[0,300],[1320,1740],[2760,3180]])night+=Math.max(0,Math.min(E,iv[1])-Math.max(S,iv[0]));const pay=H?H*work/60+H*0.25*over/60+H*0.25*night/60:0;return{tot,work,over,night,pay}}
+const fm=m=>Math.floor(m/60)+"時間"+("0"+(m%60)).slice(-2)+"分(" +(m/60).toFixed(2)+"h)";
+function go(){const S=hm($("s").value),E=hm($("e").value);if(S===null||E===null){out("時刻を入力してください");return}const r=wt(S,E,n("b"),n("h"));
+out(`拘束時間 ${fm(r.tot)}<br>実労働時間 <b>${fm(r.work)}</b><br>うち時間外(8時間超) ${fm(r.over)}<br>うち深夜(22〜5時) ${fm(r.night)}`+(n("h")?`<hr>賃金の概算 <b>${yen(r.pay)}</b>`:""))}
+go()</script></body></html>

@@ -1,0 +1,26 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>西暦⇔和暦変換・年齢計算|かんたん計算ツール</title><meta name="description" content="西暦と和暦(令和・平成・昭和・大正・明治)の相互変換と、生年月日からの満年齢・数え年・次の誕生日までの日数を計算します。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#work">給与・働き方</a><a href="index.html#biz">事業・経理</a><a href="index.html#life">お金・日付</a></nav></header>
+<main><h1>西暦⇔和暦変換・年齢計算</h1><p>西暦と和暦を相互に変換し、生年月日から年齢を計算します。契約書・申請書の記入に。</p>
+<div class="card" oninput="go()" onchange="go()"><h2>西暦→和暦</h2><label>日付(明治6年=1873年以降)</label><input id="d" type="date" value="2026-10-09"><div class="res" id="o1"></div></div>
+<div class="card" oninput="go()" onchange="go()"><h2>和暦→西暦</h2><label>元号</label><select id="g"><option>令和</option><option>平成</option><option>昭和</option><option>大正</option><option>明治</option></select>
+<label>年(元年は1)</label><input id="y" type="number" value="8"><div class="res" id="o2"></div></div>
+<div class="card" oninput="go()" onchange="go()"><h2>年齢計算</h2><label>生年月日</label><input id="b" type="date" value="1990-04-15"><label>基準日</label><input id="r" type="date" value="2026-10-09"><div class="res" id="o3"></div><button onclick="go()">計算する</button></div>
+<h2>元号の開始日</h2><p>令和:2019年5月1日/平成:1989年1月8日/昭和:1926年12月25日/大正:1912年7月30日/明治:1873年(明治6年)1月1日にグレゴリオ暦へ移行。年の途中で改元されるため、平成31年=2019年1〜4月、昭和64年=1989年1月1〜7日のように同じ西暦年に2つの元号が存在します。</p>
+<h2>年齢の数え方</h2><p>満年齢は誕生日に1歳加算。数え年は生まれた年を1歳とし、元日に加算する方式(西暦年−生年+1)で表示しています。なお法律上(年齢計算ニ関スル法律)は、誕生日の前日の終了時に満年齢が加算されます。2月29日生まれの次の誕生日は平年では3月1日として計算しています。</p>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+</main><footer><details><summary>すべてのツール</summary><p><b>税金・請求書</b><br><a href="tax.html">消費税計算(税込⇔税抜)</a> / <a href="withholding.html">報酬の源泉徴収税額計算</a> / <a href="bill.html">10%・8%混在の請求書 消費税計算</a> / <a href="invoice.html">インボイス登録・消費税納税額の比較</a> / <a href="sidetax.html">副業の税金(所得税・住民税)の目安</a> / <a href="grossup.html">手取りから請求額を逆算(源泉徴収あり)</a></p><p><b>給与・働き方</b><br><a href="hourly.html">時給⇔月給・年収の換算</a> / <a href="overtime.html">残業代(割増賃金)の計算</a> / <a href="worktime.html">勤務時間・労働時間の計算</a> / <a href="yukyu.html">有給休暇の付与日数計算</a> / <a href="target.html">フリーランスの必要時給・単価の計算</a></p><p><b>事業・経理</b><br><a href="percent.html">割合・割引・増減率の計算</a> / <a href="margin.html">利益率・粗利率の計算</a> / <a href="breakeven.html">損益分岐点の計算</a> / <a href="rent.html">家賃・光熱費の按分計算</a> / <a href="depreciation.html">減価償却費の計算(定額法)</a></p><p><b>お金・日付</b><br><a href="nissuu.html">日割り計算・日数計算</a> / <a href="wareki.html">西暦⇔和暦変換・年齢計算</a> / <a href="compound.html">複利計算・積立シミュレーション</a> / <a href="loan.html">ローン返済シミュレーション</a></p></details>計算結果は目安です。税務・労務・法律上の判断は、税理士・社会保険労務士・税務署などの専門家や公的機関にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const $=i=>document.getElementById(i),n=i=>+$(i).value||0,f=x=>Math.round(x).toLocaleString("ja-JP"),yen=x=>f(x)+"円",out=h=>{$("o").innerHTML=h};
+const ERAS=[["令和",2019,5,1,99],["平成",1989,1,8,31],["昭和",1926,12,25,64],["大正",1912,7,30,15],["明治",1868,1,25,45]];
+const pd=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?[+m[1],+m[2],+m[3]]:null};
+const cmp=(a,b)=>a[0]-b[0]||a[1]-b[1]||a[2]-b[2];
+const ut=d=>Date.UTC(d[0],d[1]-1,d[2])/864e5;
+function toWareki(d){if(d[0]<1873)return null;for(const e of ERAS){if(cmp(d,[e[1],e[2],e[3]])>=0){const y=d[0]-e[1]+1;return e[0]+(y===1?"元":y)+"年"}}return null}
+function fromWareki(g,y){const e=ERAS.find(x=>x[0]===g);if(!e||!(y>=1)||y>e[4]||y!==Math.floor(y))return null;return e[1]+y-1}
+function age(b,r){let a=r[0]-b[0];if(r[1]<b[1]||(r[1]===b[1]&&r[2]<b[2]))a--;return a}
+function go(){const d=pd($("d").value);$("o1").innerHTML=d?(toWareki(d)?`${d[0]}年${d[1]}月${d[2]}日 = <b>${toWareki(d)}${d[1]}月${d[2]}日</b>`:"1873年より前は対応していません"):"日付を入力してください";
+const g=$("g").value,y=n("y"),s=fromWareki(g,y);let t=s?`${g}${y===1?"元":y}年 = <b>${s}年</b>`:"年が範囲外です("+g+"は最大"+ERAS.find(x=>x[0]===g)[4]+"年)";if(s&&g==="平成"&&y===31)t+="(2019年4月30日まで)";if(s&&g==="昭和"&&y===64)t+="(1989年1月7日まで)";if(s&&g==="令和"&&y===1)t+="(2019年5月1日から)";if(s&&g==="平成"&&y===1)t+="(1989年1月8日から)";$("o2").innerHTML=t;
+const b=pd($("b").value),r=pd($("r").value);if(b&&r){if(cmp(b,r)>0){$("o3").innerHTML="基準日は生年月日以降にしてください";return}
+const a=age(b,r);let nx=[r[0],b[1],b[2]];if(cmp(nx,r)<=0)nx=[r[0]+1,b[1],b[2]];const nd=Date.UTC(nx[0],nx[1]-1,nx[2])/864e5-ut(r);
+$("o3").innerHTML=`満年齢 <b>${a}歳</b>/数え年 ${r[0]-b[0]+1}歳<br>生年月日 ${toWareki(b)||"-"}(${b[0]}年)<br>生まれてから <b>${f(ut(r)-ut(b))}日</b>/次の誕生日(${a+1}歳)まで <b>${nd}日</b>`}else $("o3").innerHTML="日付を入力してください"}
+go()</script></body></html>

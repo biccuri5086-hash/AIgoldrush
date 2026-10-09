@@ -1,0 +1,18 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>請求書の消費税計算(10%・8%混在・端数処理)|かんたん計算ツール</title><meta name="description" content="10%と8%が混在する請求書の税率ごとの小計・消費税額・合計を計算。インボイス制度の「税率ごとに1回の端数処理」に対応します。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#work">給与・働き方</a><a href="index.html#biz">事業・経理</a><a href="index.html#life">お金・日付</a></nav></header>
+<main><h1>10%・8%混在の請求書 消費税計算</h1><p>軽減税率が混在する請求書の消費税を、インボイスの端数処理ルールで計算します。</p>
+<div class="card" oninput="go()" onchange="go()"><label>金額の区分</label><select id="mode"><option value="exc">税抜金額を入力</option><option value="inc">税込金額を入力</option></select>
+<label>端数処理</label><select id="m"><option value="floor">切り捨て</option><option value="round">四捨五入</option><option value="ceil">切り上げ</option></select>
+<div id="rows"></div><button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<h2>使い方</h2><p>明細ごとの金額と税率を入力すると、税率ごとに合算して消費税額を算出します。適格請求書(インボイス)では、消費税額の端数処理は「1枚の請求書につき税率ごとに1回」と定められており、明細1行ごとの端数処理は認められません。</p>
+<h2>前提</h2><p>税率は10%(標準)と8%(軽減)のみです。端数処理の方法(切り捨て・切り上げ・四捨五入)は事業者が選べます。税込入力の場合は「税込合計×税率÷(1+税率)」で消費税額を求めます。</p>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+</main><footer><details><summary>すべてのツール</summary><p><b>税金・請求書</b><br><a href="tax.html">消費税計算(税込⇔税抜)</a> / <a href="withholding.html">報酬の源泉徴収税額計算</a> / <a href="bill.html">10%・8%混在の請求書 消費税計算</a> / <a href="invoice.html">インボイス登録・消費税納税額の比較</a> / <a href="sidetax.html">副業の税金(所得税・住民税)の目安</a> / <a href="grossup.html">手取りから請求額を逆算(源泉徴収あり)</a></p><p><b>給与・働き方</b><br><a href="hourly.html">時給⇔月給・年収の換算</a> / <a href="overtime.html">残業代(割増賃金)の計算</a> / <a href="worktime.html">勤務時間・労働時間の計算</a> / <a href="yukyu.html">有給休暇の付与日数計算</a> / <a href="target.html">フリーランスの必要時給・単価の計算</a></p><p><b>事業・経理</b><br><a href="percent.html">割合・割引・増減率の計算</a> / <a href="margin.html">利益率・粗利率の計算</a> / <a href="breakeven.html">損益分岐点の計算</a> / <a href="rent.html">家賃・光熱費の按分計算</a> / <a href="depreciation.html">減価償却費の計算(定額法)</a></p><p><b>お金・日付</b><br><a href="nissuu.html">日割り計算・日数計算</a> / <a href="wareki.html">西暦⇔和暦変換・年齢計算</a> / <a href="compound.html">複利計算・積立シミュレーション</a> / <a href="loan.html">ローン返済シミュレーション</a></p></details>計算結果は目安です。税務・労務・法律上の判断は、税理士・社会保険労務士・税務署などの専門家や公的機関にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const $=i=>document.getElementById(i),n=i=>+$(i).value||0,f=x=>Math.round(x).toLocaleString("ja-JP"),yen=x=>f(x)+"円",out=h=>{$("o").innerHTML=h};
+const RN=6;
+(function(){let h="";for(let i=1;i<=RN;i++)h+=`<label>明細${i}</label><div style="display:flex;gap:8px"><input id="a${i}" type="number" inputmode="numeric" value="${i===1?10000:i===2?5000:i===3?3000:""}"><select id="r${i}" style="max-width:110px"><option value="10">10%</option><option value="8"${i===2?" selected":""}>8%</option></select></div>`;$("rows").innerHTML=h})();
+function calcBill(lines,inc,rm){const sum={};for(const l of lines){sum[l[1]]=(sum[l[1]]||0)+l[0]}const rows=Object.keys(sum).sort((a,b)=>b-a).map(r=>{const s=sum[r],rate=+r,tax=Math[rm](inc?s*rate/(100+rate):s*rate/100);return{rate,s,tax,tot:inc?s:s+tax}});return rows}
+function go(){const lines=[];for(let i=1;i<=RN;i++){const v=n("a"+i);if(v)lines.push([v,$("r"+i).value])}const inc=$("mode").value==="inc",rows=calcBill(lines,inc,$("m").value);if(!rows.length){out("金額を入力してください");return}
+out(rows.map(x=>`${x.rate}%対象:${inc?"税込":"税抜"}${yen(x.s)} → 消費税額 <b>${yen(x.tax)}</b>(税抜 ${yen(x.tot-x.tax)}・税込 ${yen(x.tot)})`).join("<br>")+`<hr>消費税額合計 <b>${yen(rows.reduce((a,x)=>a+x.tax,0))}</b>/請求合計(税込) <b>${yen(rows.reduce((a,x)=>a+x.tot,0))}</b>`)}
+go()</script></body></html>

@@ -1,0 +1,23 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>年次有給休暇の付与日数計算(正社員・パート)|かんたん計算ツール</title><meta name="description" content="入社日と基準日から、年次有給休暇の付与日数と次回付与日を計算。週所定労働日数が少ないパート・アルバイトの比例付与にも対応します。"><link rel="stylesheet" href="style.css"></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#work">給与・働き方</a><a href="index.html#biz">事業・経理</a><a href="index.html#life">お金・日付</a></nav></header>
+<main><h1>有給休暇の付与日数計算</h1><p>労働基準法に基づく有給の付与日・付与日数を計算します。</p>
+<div class="card" oninput="go()" onchange="go()"><label>入社日</label><input id="j" type="date" value="2024-04-01">
+<label>基準日</label><input id="r" type="date" value="2026-10-09">
+<label>労働日数の区分</label><select id="k"><option value="f">週5日以上、または週30時間以上</option><option value="4">週4日(年169〜216日)</option><option value="3">週3日(年121〜168日)</option><option value="2">週2日(年73〜120日)</option><option value="1">週1日(年48〜72日)</option></select>
+<button onclick="go()">計算する</button><div class="res" id="o"></div></div>
+<h2>付与日数の表(出勤率8割以上が条件)</h2><table><tr><th>勤続</th><th>0.5年</th><th>1.5年</th><th>2.5年</th><th>3.5年</th><th>4.5年</th><th>5.5年</th><th>6.5年〜</th></tr><tr><td>週5日以上など</td><td>10</td><td>11</td><td>12</td><td>14</td><td>16</td><td>18</td><td>20</td></tr><tr><td>週4日</td><td>7</td><td>8</td><td>9</td><td>10</td><td>12</td><td>13</td><td>15</td></tr><tr><td>週3日</td><td>5</td><td>6</td><td>6</td><td>8</td><td>9</td><td>10</td><td>11</td></tr><tr><td>週2日</td><td>3</td><td>4</td><td>4</td><td>5</td><td>6</td><td>6</td><td>7</td></tr><tr><td>週1日</td><td>1</td><td>2</td><td>2</td><td>2</td><td>3</td><td>3</td><td>3</td></tr></table>
+<h2>前提・注意</h2><p>入社日から6か月継続勤務し全労働日の8割以上出勤した場合に初回付与、以後1年ごとに付与されます(労働基準法第39条)。週の所定労働時間が30時間以上の場合は日数にかかわらず通常の付与日数です。10日以上付与される労働者には年5日の取得義務があり、時効は付与から2年です。会社が法定より有利な制度(入社時付与など)を設けている場合は、そちらが優先されます。個人事業主・業務委託(雇用でない場合)には適用されません。</p>
+<div class="ad"><!-- 広告枠(AdSense承認後にコードを設置) --></div>
+</main><footer><details><summary>すべてのツール</summary><p><b>税金・請求書</b><br><a href="tax.html">消費税計算(税込⇔税抜)</a> / <a href="withholding.html">報酬の源泉徴収税額計算</a> / <a href="bill.html">10%・8%混在の請求書 消費税計算</a> / <a href="invoice.html">インボイス登録・消費税納税額の比較</a> / <a href="sidetax.html">副業の税金(所得税・住民税)の目安</a> / <a href="grossup.html">手取りから請求額を逆算(源泉徴収あり)</a></p><p><b>給与・働き方</b><br><a href="hourly.html">時給⇔月給・年収の換算</a> / <a href="overtime.html">残業代(割増賃金)の計算</a> / <a href="worktime.html">勤務時間・労働時間の計算</a> / <a href="yukyu.html">有給休暇の付与日数計算</a> / <a href="target.html">フリーランスの必要時給・単価の計算</a></p><p><b>事業・経理</b><br><a href="percent.html">割合・割引・増減率の計算</a> / <a href="margin.html">利益率・粗利率の計算</a> / <a href="breakeven.html">損益分岐点の計算</a> / <a href="rent.html">家賃・光熱費の按分計算</a> / <a href="depreciation.html">減価償却費の計算(定額法)</a></p><p><b>お金・日付</b><br><a href="nissuu.html">日割り計算・日数計算</a> / <a href="wareki.html">西暦⇔和暦変換・年齢計算</a> / <a href="compound.html">複利計算・積立シミュレーション</a> / <a href="loan.html">ローン返済シミュレーション</a></p></details>計算結果は目安です。税務・労務・法律上の判断は、税理士・社会保険労務士・税務署などの専門家や公的機関にご確認ください。<br>© かんたん計算ツール</footer>
+<script>const $=i=>document.getElementById(i),n=i=>+$(i).value||0,f=x=>Math.round(x).toLocaleString("ja-JP"),yen=x=>f(x)+"円",out=h=>{$("o").innerHTML=h};
+const T={f:[10,11,12,14,16,18,20],4:[7,8,9,10,12,13,15],3:[5,6,6,8,9,10,11],2:[3,4,4,5,6,6,7],1:[1,2,2,2,3,3,3]};
+const pd=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||"");return m?[+m[1],+m[2],+m[3]]:null};
+function addM(d,k){const t=d[1]-1+k,y=d[0]+Math.floor(t/12),m=((t%12)+12)%12;const dim=new Date(y,m+1,0).getDate();return[y,m+1,Math.min(d[2],dim)]}
+const key=d=>d[0]*10000+d[1]*100+d[2];
+const fd=d=>d[0]+"年"+d[1]+"月"+d[2]+"日";
+function grant(j,r,kind){if(key(addM(j,6))>key(r))return{none:true,first:addM(j,6),days:T[kind][0]};let k=0;while(key(addM(j,6+12*(k+1)))<=key(r))k++;return{k,last:addM(j,6+12*k),days:T[kind][Math.min(k,6)],next:addM(j,6+12*(k+1)),nextDays:T[kind][Math.min(k+1,6)]}}
+function go(){const j=pd($("j").value),r=pd($("r").value);if(!j||!r){out("日付を入力してください");return}const g=grant(j,r,$("k").value);
+if(g.none){out(`基準日時点では入社6か月未満で、まだ付与されていません。<br>初回付与日 <b>${fd(g.first)}</b>(${g.days}日)`);return}
+out(`直近の付与日 <b>${fd(g.last)}</b>(勤続${g.k+0.5}年)<br>付与日数 <b>${g.days}日</b><br>次回付与日 <b>${fd(g.next)}</b>(${g.nextDays}日)`+(g.days>=10?"<br>年5日の取得義務の対象です":""))}
+go()</script></body></html>
