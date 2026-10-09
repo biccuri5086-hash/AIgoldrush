@@ -1,0 +1,49 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>インボイス対応 請求書作成(源泉徴収・10%/8%混在)|かんたん計算ツール</title>
+<meta name="description" content="登録番号つきの適格請求書を無料で作成。税率ごとに1回の端数処理、源泉徴収の差引、PDF印刷、CSV保存、共有リンクに対応。入力内容はブラウザ内だけで処理されます。">
+<link rel="stylesheet" href="style.css">
+<style>table{width:100%;border-collapse:collapse}th,td{border:1px solid var(--bd);padding:6px;text-align:left}td input,td select{padding:6px}.num{text-align:right}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.btns button{margin-right:8px}#doc h2{margin-top:0}
+@media print{header,footer,.card,.ad,.btns,.noprint,h1,p.lead{display:none!important}#doc{border:0;padding:0}body{background:#fff;color:#000}}</style></head><body>
+<header><a href="index.html">かんたん計算ツール</a><nav><a href="index.html#tax">税金・請求書</a><a href="index.html#biz">事業・経理</a></nav></header>
+<main><h1>インボイス対応 請求書作成ツール</h1>
+<p class="lead">適格請求書の記載事項(発行者名・登録番号・取引年月日・税率ごとの対価と税額・宛先)をそろえた請求書を作り、PDF(印刷)やCSVで保存できます。入力内容はブラウザ内だけで処理され、サーバーには送信されません。</p>
+<div class="card noprint">
+<div class="row"><div><label>発行者名(屋号・氏名)</label><input id="from"></div><div><label>登録番号(T+13桁)</label><input id="reg" placeholder="T1234567890123"></div></div>
+<div class="row"><div><label>宛先</label><input id="to"></div><div><label>請求日</label><input id="date" type="date"></div></div>
+<div class="row"><div><label>支払期日</label><input id="due" type="date"></div><div><label>端数処理(税率ごとに1回)</label><select id="mode"><option value="floor">切り捨て</option><option value="round">四捨五入</option><option value="ceil">切り上げ</option></select></div></div>
+<label><input id="wh" type="checkbox" style="width:auto"> 報酬から源泉徴収する(税抜金額に対して計算)</label>
+<h3>明細</h3><table><thead><tr><th>品名</th><th>数量</th><th>単価(税抜)</th><th>税率</th><th></th></tr></thead><tbody id="rows"></tbody></table>
+<div class="btns"><button onclick="addRow()">行を追加</button><button onclick="window.print()">PDF保存・印刷</button><button onclick="csv()">CSV保存</button><button onclick="share()">共有リンクをコピー</button></div><div id="msg" class="noprint"></div></div>
+<div class="card" id="doc"></div>
+<div class="ad"></div>
+<h2>計算のルール</h2><ul><li>税額は「税率ごとの税抜合計」に対して1回だけ端数処理します(明細ごとではありません)。</li><li>源泉徴収は税抜金額が対象で、100万円以下は10.21%、超える部分は20.42%です。法人への支払いなど対象外のケースがあります。</li><li>共有リンクには入力内容がURLの「#」以降に含まれます(サーバーには送信されませんが、リンクを渡した相手には内容が見えます)。</li></ul>
+<p class="noprint" style="color:var(--mut);font-size:.85rem">最終確認日:2026-10-09 / 参考:<a href="https://www.nta.go.jp/taxes/shiraberu/zeimokubetsu/shohi/keigenzeiritsu/invoice.htm">国税庁 インボイス制度</a>。書式は目安です。必要な記載事項は国税庁の案内でご確認ください。</p>
+</main><footer>計算結果は目安です。<p><a href="privacy.html">プライバシーポリシー</a> / <a href="about.html">運営者情報</a> / <a href="contact.html">お問い合わせ</a></p></footer>
+<script>
+const $=id=>document.getElementById(id),f=n=>n.toLocaleString("ja-JP");
+function addRow(r){r=r||{n:"",q:1,p:0,t:10};const tr=document.createElement("tr");
+tr.innerHTML='<td><input class="n"></td><td><input class="q" type="number" min="0" step="1" style="width:70px"></td><td><input class="p" type="number" min="0" step="1" style="width:110px"></td><td><select class="t"><option value="10">10%</option><option value="8">8%(軽減)</option></select></td><td><button type="button">削除</button></td>';
+tr.querySelector(".n").value=r.n;tr.querySelector(".q").value=r.q;tr.querySelector(".p").value=r.p;tr.querySelector(".t").value=String(r.t);
+tr.querySelector("button").onclick=()=>{tr.remove();calc()};tr.addEventListener("input",calc);$("rows").appendChild(tr);calc()}
+function rows(){return [...$("rows").children].map(tr=>({n:tr.querySelector(".n").value,q:Math.max(0,Math.floor(+tr.querySelector(".q").value||0)),p:Math.max(0,Math.floor(+tr.querySelector(".p").value||0)),t:+tr.querySelector(".t").value}))}
+function tax(sub,r,m){const x=sub*r;return m==="floor"?Math.floor(x/100):m==="ceil"?Math.floor((x+99)/100):Math.floor((x+50)/100)}
+function wh(b){return Math.floor((Math.min(b,1000000)*1021+Math.max(b-1000000,0)*2042)/10000)}
+function model(){const R=rows(),m=$("mode").value,S={10:0,8:0};R.forEach(r=>S[r.t]+=r.q*r.p);
+const T={10:tax(S[10],10,m),8:tax(S[8],8,m)},sub=S[10]+S[8],total=sub+T[10]+T[8],w=$("wh").checked?wh(sub):0;return{R,S,T,sub,total,w,pay:total-w}}
+function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
+function calc(){const d=model();let h='<h2>請求書</h2><p>宛先:'+esc($("to").value)+' 御中<br>請求日:'+esc($("date").value)+(($("due").value)?' / 支払期日:'+esc($("due").value):'')+'<br>発行者:'+esc($("from").value)+'<br>登録番号:'+esc($("reg").value)+'</p><table><tr><th>品名</th><th class="num">数量</th><th class="num">単価</th><th class="num">税率</th><th class="num">金額(税抜)</th></tr>';
+d.R.forEach(r=>h+='<tr><td>'+esc(r.n)+(r.t===8?'(※軽減税率)':'')+'</td><td class="num">'+r.q+'</td><td class="num">'+f(r.p)+'</td><td class="num">'+r.t+'%</td><td class="num">'+f(r.q*r.p)+'</td></tr>');
+h+='</table><table style="margin-top:12px">';[10,8].forEach(t=>{if(d.S[t]||t===10)h+='<tr><td>'+t+'%対象 '+f(d.S[t])+'円</td><td class="num">消費税 '+f(d.T[t])+'円</td></tr>'});
+h+='<tr><td><b>合計(税込)</b></td><td class="num"><b>'+f(d.total)+'円</b></td></tr>';if(d.w)h+='<tr><td>源泉徴収税額</td><td class="num">−'+f(d.w)+'円</td></tr><tr><td><b>ご請求額</b></td><td class="num"><b>'+f(d.pay)+'円</b></td></tr>';
+$("doc").innerHTML=h+'</table>'}
+function state(){return{from:$("from").value,reg:$("reg").value,to:$("to").value,date:$("date").value,due:$("due").value,mode:$("mode").value,wh:$("wh").checked,rows:rows()}}
+function share(){const j=btoa(unescape(encodeURIComponent(JSON.stringify(state()))));const u=location.href.split("#")[0]+"#"+j;(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(()=>$("msg").textContent="リンクをコピーしました",()=>{location.hash=j;$("msg").textContent="アドレスバーのURLをコピーしてください"})}
+function csv(){const d=model(),L=[["品名","数量","単価(税抜)","税率","金額(税抜)"]];d.R.forEach(r=>L.push([r.n,r.q,r.p,r.t+"%",r.q*r.p]));
+L.push([],["10%対象",d.S[10],"消費税",d.T[10]],["8%対象",d.S[8],"消費税",d.T[8]],["合計(税込)",d.total],["源泉徴収",d.w],["ご請求額",d.pay]);
+const t=L.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""').replace(/^([=+\-@])/,"'$1")+'"').join(",")).join("\r\n");
+const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+t],{type:"text/csv"}));a.download="invoice.csv";a.click()}
+["from","reg","to","date","due","mode","wh"].forEach(i=>$(i).addEventListener("input",calc));
+(function(){let s=null;try{if(location.hash.length>1)s=JSON.parse(decodeURIComponent(escape(atob(location.hash.slice(1)))))}catch(e){}
+if(s){["from","reg","to","date","due","mode"].forEach(i=>$(i).value=s[i]||$(i).value);$("wh").checked=!!s.wh;(s.rows||[]).slice(0,50).forEach(addRow)}
+else{$("date").value=new Date().toISOString().slice(0,10);addRow({n:"デザイン制作",q:1,p:100000,t:10});}calc()})();
+</script></body></html>
