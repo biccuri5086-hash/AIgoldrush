@@ -9,6 +9,11 @@
 | マーケ | marketer.md | 集客計画・投稿案 |
 | 受託営業 | sales.md | 出品文・提案・見積 |
 | 分析 | analyst.md | 数字の記録と判定 |
+| 副業統括 | side-hustle-chief.md | 副業の選定・順位付け・単価判断 |
+| 市場調査 | market-researcher.md | 単価・需要の出典付き調査 |
+| 翻訳 | translator.md | AI下訳+校閲の翻訳 |
+| 収支 | profit-planner.md | 時間単価・手取り・損益分岐 |
+| リスク・規約 | risk-compliance.md | 規約・AI開示・著作権・税の点検 |
 
 ## 使い方
 1. オーナーは週1回、Search Console/AdSense/受託の数字を貼って「週次レビューして」と伝える。
