@@ -47,7 +47,7 @@ def doc(kind):
 def build_doc(kind, fname):
     q = kind == "見積書"
     wb = Workbook(); ws = wb.active; ws.title = kind
-    for col, w in zip("ABCDEF", (36, 9, 13, 8, 6, 15)):
+    for col, w in zip("ABCDEF", (36, 9, 13, 8, 11, 19)):
         ws.column_dimensions[col].width = w
     ws["A1"] = kind; ws["A1"].font = Font(bold=True, size=18)
     ws.merge_cells("A1:F1"); ws["A1"].alignment = Alignment(horizontal="center")
@@ -68,7 +68,7 @@ def build_doc(kind, fname):
     ws["A6"] = "登録番号チェック"; lab(ws["A6"])
     ws["B6"] = ('=IF(F5="","未入力",IF(IFERROR(AND(LEN(F5)=14,LEFT(F5,1)="T",VALUE(MID(F5,2,13))>=0,ISNUMBER(VALUE(MID(F5,2,13)))),FALSE),'
                 '"形式OK(実在は国税庁サイトで確認)","形式エラー: Tと数字13桁"))')
-    ws.merge_cells("B6:D6")
+    ws.merge_cells("B6:F6")
     ws["A10"] = "※は軽減税率(8%)対象"; 
     for i, h in enumerate(["品名","数量","単価","税率(%)","軽減","金額(税抜)"], 1):
         c = ws.cell(11, i, h); c.font = B; c.fill = GRY; c.border = BOX; c.alignment = Alignment(horizontal="center")
